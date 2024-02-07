@@ -14,6 +14,7 @@ export const useQuery = <TData,>(query) => {
 
   useEffect(() => {
     const controller = new AbortController();
+    // Can read url from a context (like Apollo Provider)
     const promise = fetch("https://spacex-production.up.railway.app/", {
       signal: controller.signal,
       method: "POST",
