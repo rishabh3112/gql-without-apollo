@@ -1,4 +1,4 @@
-import { useSpaceX } from "@repo/ui/hooks/useSpaceX";
+import { Authors } from "@repo/ui/authors/Authors";
 import {
   ApolloClient,
   InMemoryCache,
@@ -7,20 +7,21 @@ import {
 } from "@apollo/client";
 
 const client = new ApolloClient({
-  uri: "https://spacex-production.up.railway.app/",
+  uri: "/api/graphql",
   cache: new InMemoryCache(),
 });
-
-const SpaceX = (): JSX.Element => {
-  const { data, loading } = useSpaceX();
-
-  return <main>{loading ? "loading" : JSON.stringify(data)}</main>;
-};
 
 export default function Page(): JSX.Element {
   return (
     <ApolloProvider client={client}>
-      <SpaceX />
+      <div className="h-screen w-full flex justify-center">
+        <div className="flex flex-col gap-2 w-3/4 p-5 m-5 border-black rounded">
+          <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
+            Authors ✍🏽
+          </h1>
+          <Authors />
+        </div>
+      </div>
     </ApolloProvider>
   );
 }

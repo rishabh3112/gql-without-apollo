@@ -1,22 +1,21 @@
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useState, useCallback, useRef } from "react";
 import { ApolloError, QueryResult } from "@apollo/client";
 import { print } from "graphql/language/printer";
 
-// TODO: handle variables (ond other options) + query result
 export const useQuery = <TData,>(query) => {
   const [state, setState] = useState<QueryResult<TData>>({
     data: undefined,
     loading: true,
     error: undefined,
   } as any);
+  const abortControllerRef = useRef(new AbortController());
 
   const queryText = useMemo(() => print(query), [query]);
 
-  useEffect(() => {
-    const controller = new AbortController();
-    // Can read url from a context (like Apollo Provider)
-    const promise = fetch("https://spacex-production.up.railway.app/", {
-      signal: controller.signal,
+  const callQuery = useCallback(() => {
+    // TODO: find strategy to abort stale requests
+    const promise = fetch("/api/graphql", {
+      signal: abortControllerRef.current.signal,
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query: queryText }),
@@ -33,11 +32,11 @@ export const useQuery = <TData,>(query) => {
           error: new ApolloError({ clientErrors: [error] }),
         } as any);
       });
-
-    return () => {
-      controller.abort();
-    };
   }, [queryText]);
 
-  return state;
+  useEffect(() => {
+    callQuery();
+  }, [callQuery]);
+
+  return { ...state, refetch: callQuery };
 };
