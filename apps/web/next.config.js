@@ -12,7 +12,7 @@ module.exports = {
   },
   experimental: {
     forceSwcTransforms: true,
-    swcPlugins: [[resolve(__dirname, "./swc_chunks_plugin.wasm"), {}]],
+    swcPlugins: [[resolve(__dirname, "./swc_remove_apollo_plugin.wasm"), {}]],
   },
   webpack: (config) => {
     config.optimization.minimize = false;
