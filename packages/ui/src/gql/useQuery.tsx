@@ -13,7 +13,7 @@ export const useQuery = <TData,>(query) => {
   const queryText = useMemo(() => print(query), [query]);
 
   const callQuery = useCallback(() => {
-    // TODO: find strategy to abort stale requests
+    // Can read url from a context (like Apollo Provider)
     const promise = fetch("/api/graphql", {
       signal: abortControllerRef.current.signal,
       method: "POST",
