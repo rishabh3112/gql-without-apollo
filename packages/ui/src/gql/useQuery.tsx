@@ -1,5 +1,5 @@
 import { useMemo, useEffect, useState, useCallback, useRef } from "react";
-import { ApolloError, QueryResult } from "@apollo/client";
+import { QueryResult } from "@apollo/client";
 import { print } from "graphql/language/printer";
 
 export const useQuery = <TData,>(query) => {
@@ -29,7 +29,7 @@ export const useQuery = <TData,>(query) => {
         setState({
           data: undefined,
           loading: false,
-          error: new ApolloError({ clientErrors: [error] }),
+          error,
         } as any);
       });
   }, [queryText]);

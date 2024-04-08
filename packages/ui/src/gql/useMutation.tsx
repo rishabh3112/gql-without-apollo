@@ -1,5 +1,5 @@
-import { useMemo, useEffect, useState, useCallback } from "react";
-import { ApolloError, QueryResult } from "@apollo/client";
+import { useMemo, useState, useCallback } from "react";
+import { QueryResult } from "@apollo/client";
 import { print } from "graphql/language/printer";
 
 // TODO: handle variables (ond other options) + query result
@@ -30,9 +30,9 @@ export const useMutation = <TData,>(mutation, { onCompleted, onError }) => {
         .catch((error) => {
           setState({
             loading: false,
-            error: new ApolloError({ clientErrors: [error] }),
+            error,
           } as any);
-          onError?.(new ApolloError({ clientErrors: [error] }));
+          onError?.(error);
         });
 
       return;
